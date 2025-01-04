@@ -1,13 +1,13 @@
+require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const { z } = require('zod'); 
 const jwt = require('jsonwebtoken');
-const User = require('../db');  
+const {User , Account } = require('../db');  
 const bcrypt = require('bcrypt');
-
 const {authMiddleware} = require('../middleware/middleware');
 
-// Zod validation schema for signup
+// z validation schema for signup
 const signupSchema = z.object({
     username: z
         .string()
@@ -30,8 +30,7 @@ const signupSchema = z.object({
         .trim(),
 });
 
-
-// Zod validation schema for login
+// z validation schema for login
 const loginSchema = z.object({
     username: z
         .string()
@@ -43,6 +42,7 @@ const loginSchema = z.object({
         .string()
         .min(6, "Password must be at least 6 characters long"),
 });
+
 
 router.post('/signup', async (req, res) => {
     const body = req.body;
@@ -66,6 +66,15 @@ router.post('/signup', async (req, res) => {
     // Create the user in the database
     const dbUser = await User.create(body);
 
+    // Generate a random balance between 1 and 10000
+    const randomBalance = Math.floor(Math.random() * 10000) + 1;
+
+    // Create an account for the user with the random balance
+    await Account.create({
+        userId: dbUser._id,  // Link account to the user
+        balance: randomBalance,  // Set the random balance
+    });
+
     // Generate a JWT token
     const token = jwt.sign(
         { userId: dbUser._id },
@@ -79,8 +88,6 @@ router.post('/signup', async (req, res) => {
         token: token, // Send the generated token
     });
 });
-
-
 
 
 // POST route for signing in
@@ -130,14 +137,13 @@ router.post('/signin', async (req, res) => {
     }
 });
 
-
-
 //other routes
-const updateSchema = Zod.object({
-    password : Zod.string().optional(),
-    firstName : Zod.string().optional(),
-    lastName : Zod.string().optional(),
+const updateSchema = z.object({
+    password : z.string().optional(),
+    firstName : z.string().optional(),
+    lastName : z.string().optional(),
 });
+
 
 router.put('/', authMiddleware, async (req, res) => {
     // Validate the request body

@@ -25,7 +25,7 @@ module.exports = {
 
 
 
-
+require('dotenv').config();
 const jwt = require('jsonwebtoken');
 
 // Authentication middleware
@@ -55,5 +55,5 @@ const authMiddleware = (req, res, next) => {
 };
 
 module.exports = {
-    authMiddleware,
+    authMiddleware
 };
