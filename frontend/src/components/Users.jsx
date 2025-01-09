@@ -1,37 +1,53 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios  from 'axios';
+import Button from './Button';
 
-const Users = ({ users = [] }) => {
-  return (
-    <div className="p-4 space-y-4">
-      <div className="text-xl font-semibold text-gray-800 mb-4">User List</div>
-      <div className="space-y-2">
-        {users.length === 0 ? (
-          <div className="text-gray-500">No users found.</div>
-        ) : (
-          users.map((user) => (
-            <div
-              key={user.id}
-              className="flex items-center justify-between p-4 bg-white shadow-md rounded-lg"
-            >
-              <div className="flex items-center space-x-4">
-                {/* User Avatar */}
-                <div className="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center text-white">
-                  {user.name.charAt(0).toUpperCase()}
-                </div>
-                <div>
-                  <div className="font-semibold text-gray-800">{user.name}</div>
-                  <div className="text-sm text-gray-500">{user.email}</div>
-                </div>
-              </div>
-              <div>
-                <button className="text-blue-600 hover:underline">View</button>
-              </div>
-            </div>
-          ))
-        )}
-      </div>
-    </div>
-  );
+const Users = ( ) => {
+
+  const [users, setUsers] = useState([]);
+  const [filter , setFilter] = useState("");
+
+  useEffect(() => {
+    axios.get("http://localhost:3000/api/v1/user/bulks?filter=" + filter)
+    .then(response => {
+      setUsers(response.data.user)
+    })
+  } , [filter])
+
+  return <>
+  <div className='my-2'>
+    <input onChange={(e) => {
+      setFilter(e.target.value)
+    }}
+     type="text"  placeholder='Search users...' className='w-full px-2 py-1 border rounded border-slate-200' />
+  </div>
+  <div>
+    {users.map(user => <User user={user}/>)}
+  </div>
+  </>
+
 };
+
+
+function User({user}){
+  return 
+  <div className='flex justify-between'>
+      <div className='flex'>
+         <div className='rounded-full h-12 w-12 bg-slate-200 flex justify-center mt-1 mr-2'>
+             <div className='flex flex-col justify-center h-full text-xl'>
+              {user.firstName[0]}
+             </div>
+         </div>
+         <div className='flex flex-col justify-center h-full'>
+             <div>
+                 {user.firstName}  {user.lastName}
+             </div>
+         </div>
+      </div>
+      <div className='flex flex-col justify-center h-full'>
+        <Button label={"send money"}/>
+      </div>
+  </div>
+}
 
 export default Users;

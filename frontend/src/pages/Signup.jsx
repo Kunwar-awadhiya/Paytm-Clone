@@ -42,13 +42,15 @@ const Signup = () => {
           }}placeholder="Enter your password" label={"Password"} />
 
           <div className="pt-4">
-            <Button onClick={()=>{
-              axios.post("http://localhost:3000/api/v1/user/signup" ,{
+            <Button onClick={async()=>{
+              const response = await axios.post("http://localhost:3000/api/v1/user/signup" ,{
                 firstName,
                 lastName,
                 username,
                 password
-              })
+              });
+              localStorage.setItem("token",response.data.token)
+              localStorage.delete("token");
             }} 
             label={'Sign up'} />
           </div>

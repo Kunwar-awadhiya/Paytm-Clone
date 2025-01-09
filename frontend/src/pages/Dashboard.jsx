@@ -7,10 +7,6 @@ const Dashboard = () => {
   // Sample data for users
   const userList = [
     { id: 1, name: 'John Doe', email: 'john@example.com' },
-    { id: 2, name: 'Jane Smith', email: 'jane@example.com' },
-    { id: 3, name: 'Alex Johnson', email: 'alex@example.com' },
-    { id: 4, name: 'Emily Davis', email: 'emily@example.com' },
-    { id: 5, name: 'Michael Brown', email: 'michael@example.com' },
   ];
 
   // State for filtered users and search query
