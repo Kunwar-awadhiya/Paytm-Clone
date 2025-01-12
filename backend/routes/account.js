@@ -65,7 +65,7 @@ router.post("/transfer", authMiddleware, async (req, res) => {
     }
 });*/
 
-// ai code
+
 router.post("/transfer", authMiddleware, async (req, res) => {
     const session = await mongoose.startSession();
 
