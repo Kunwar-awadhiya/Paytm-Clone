@@ -25,47 +25,8 @@ router.get('/balance', authMiddleware, async(req, res) => {
 
 
 
-// transaction with sessions and rollbacks 
-/*
-router.post("/transfer", authMiddleware, async (req, res) => {
-    const session = await mongoose.startSession();
-    
-    try {
-        // Start a session for the transaction
-        const { amount, to } = req.body;
 
-        // Find the sender's account
-        const account = await Account.findOne({ userId: req.userId }).session(session);
-
-        if (!account || account.balance < amount) {
-            await session.abortTransaction();
-            return res.status(400).json({ message: "Insufficient balance" });
-        }
-
-        // Find the recipient's account
-        const toAccount = await Account.findOne({ userId: to }).session(session);
-
-        if (!toAccount) {
-            await session.abortTransaction();
-            return res.status(400).json({ message: "Invalid account" });
-        }
-
-        // Perform the transfer (debit from sender, credit to recipient)
-        await Account.updateOne({ userId: req.userId }, { $inc: { balance: -amount } }).session(session);
-        await Account.updateOne({ userId: to }, { $inc: { balance: amount } }).session(session);
-
-        // Commit the transaction
-        await session.commitTransaction();
-        res.json({ message: "Transfer successful" });
-    } catch (err) {
-        await session.abortTransaction();
-        res.status(500).json({ message: "Internal Server Error" });
-    } finally {
-        session.endSession();
-    }
-});*/
-
-
+// transaction with session 
 router.post("/transfer", authMiddleware, async (req, res) => {
     const session = await mongoose.startSession();
 
