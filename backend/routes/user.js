@@ -7,7 +7,7 @@ const {User , Account } = require('../db');
 const bcrypt = require('bcrypt');
 const {authMiddleware} = require('../middleware/middleware');
 
-// z validation schema for signup
+// z validation schema 
 const signupSchema = z.object({
     username: z
         .string()
@@ -30,7 +30,6 @@ const signupSchema = z.object({
         .trim(),
 });
 
-// z validation schema for login
 const loginSchema = z.object({
     username: z
         .string()
@@ -152,7 +151,7 @@ router.put('/', authMiddleware, async (req, res) => {
     if (!parsed.success) {
         return res.status(400).json({
             message: "Invalid input",
-            errors: parsed.error.errors, // Return detailed validation errors
+            errors: parsed.error.errors, 
         });
     }
 
@@ -209,7 +208,5 @@ router.get('/bulks', async (req, res) => {
         });
     }
 });
-
-
 
 module.exports = router;
