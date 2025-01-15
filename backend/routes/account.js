@@ -67,7 +67,7 @@ router.post("/transfer", authMiddleware, async (req, res) => {
         await session.abortTransaction();
         res.status(500).json({ message: "Internal Server Error" });
     } finally {
-        // End the session after the transaction is either committed or aborted
+
         session.endSession();
     }
 });
