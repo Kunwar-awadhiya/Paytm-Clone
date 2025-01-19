@@ -5,7 +5,7 @@ const {Account} = require('../db');
 const {authMiddleware} = require('../middleware/middleware');
 const mongoose = require('mongoose');
 
-// Get Account Balance
+// get balance
 router.get('/balance', authMiddleware, async(req, res) => {
     try {
         // Find the account for the authenticated user
